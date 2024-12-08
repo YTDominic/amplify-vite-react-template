@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 
+
 const client = generateClient<Schema>();
 
 function App() {
+
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
 
   useEffect(() => {
@@ -14,7 +16,10 @@ function App() {
   }, []);
 
   function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
+    client.models.Todo.create(
+      { content: window.prompt("Meter Reading"),
+        machineID: window.prompt("Machine Name")
+      });
   }
 
   return (
@@ -23,7 +28,7 @@ function App() {
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
+          <li key={todo.id}>{todo.machineID}|{todo.content}|{todo.id}|{todo.machineID}</li>
         ))}
       </ul>
       <div>
