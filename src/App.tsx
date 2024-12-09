@@ -28,7 +28,7 @@ function App() {
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.machineID}|{todo.content}|{todo.id}|{todo.machineID}</li>
+          <li key={todo.id}>{todo.machineID}+{todo.content}</li>
         ))}
       </ul>
       <div>
