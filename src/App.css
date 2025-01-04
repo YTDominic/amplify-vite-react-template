@@ -24,7 +24,7 @@ body {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #444;
+  color: hwb(123 15% 21%);
 }
 
 /* Grid Layout */
@@ -37,8 +37,9 @@ body {
 }
 
 .card {
-  flex: 0 0 250px; /* Fix card width */
+  flex: 0 0 150px; /* Fix card width */
   max-width: 250px;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
 }
 
 .card:hover {

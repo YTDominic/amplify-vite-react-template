@@ -38,7 +38,6 @@ function App() {
   
   return (
     <main>    
-      <h1>Energy Saving</h1>
       <button onClick={createTodo}>+ new</button> 
       <div className="container">
         <h1 className="header">Meter Readings</h1>
