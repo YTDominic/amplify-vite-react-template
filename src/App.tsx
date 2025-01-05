@@ -1,29 +1,54 @@
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
-const client = generateClient<Schema>();
+import QrReader from 'react-qr-scanner'; // Barcode/QR Scanner
 import "./App.css";
 
-function App() {
+const client = generateClient<Schema>();
 
+function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+  const [scannedData, setScannedData] = useState<string>('');
+  const [scanning, setScanning] = useState<boolean>(false);
+
+  // Observe data changes from DynamoDB
   useEffect(() => {
-    client.models.Todo.observeQuery().subscribe({
+    const subscription = client.models.Todo.observeQuery().subscribe({
       next: (data) => setTodos([...data.items]),
     });
+
+    return () => {
+      // Clean up subscription on unmount
+      subscription.unsubscribe();
+    };
   }, []);
 
+  // Sort todos by creation date
   const sortedTodos = [...todos].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
+  // Create a new Todo item
   function createTodo() {
-    client.models.Todo.create(
-      {     
-        machineID: window.prompt("Machine Name"),
-        content: window.prompt("Meter Reading")
+    const machineID = window.prompt("Machine Name") || scannedData;
+    const content = window.prompt("Meter Reading") || scannedData;
+    if (machineID && content) {
+      client.models.Todo.create({
+        machineID: machineID,
+        content: content,
       });
+    }
   }
+
+  const handleScan = (data: any) => {
+    if (data) {
+      setScannedData(data.text);
+    }
+  };
+
+  const handleError = (err: any) => {
+    console.error(err);
+  };
 
   const formatToReadableUTC = (isoString: string): string => {
     const date = new Date(isoString);
@@ -35,21 +60,39 @@ function App() {
     
     return `${day} ${month} ${year}, ${hours}:${minutes} UTC`;
   };
-  
+
   return (
     <main>    
-      <button onClick={createTodo}>+ new</button> 
+      <button onClick={createTodo}>+ new</button>
+      <button onClick={() => setScanning(!scanning)}>
+        {scanning ? 'Stop Scanning' : 'Start Scanning'}
+      </button>
+
+      {scanning && (
+        <QrReader
+          delay={300}
+          style={{ width: '200px', height: '200px' }}
+          onError={handleError}
+          onScan={handleScan}
+        />
+      )}
+
+      <div>
+        <h3>Scanned Data:</h3>
+        <p>{scannedData}</p> {/* Display scanned result here */}
+      </div>
+
       <div className="container">
         <h1 className="header">Meter Readings</h1>
-          <div className="grid-container">
-            {sortedTodos.map((todo) => (
-              <div key={todo.id} className="card">
-                <h2 className="card-title">{todo.machineID}</h2>
-                <p className="card-content">{todo.content}</p>
-                <p className="card-date">{formatToReadableUTC(todo.createdAt)}</p>
-              </div>
+        <div className="grid-container">
+          {sortedTodos.map((todo) => (
+            <div key={todo.id} className="card">
+              <h2 className="card-title">{todo.machineID}</h2>
+              <p className="card-content">{todo.content}</p>
+              <p className="card-date">{formatToReadableUTC(todo.createdAt)}</p>
+            </div>
           ))}
-          </div>
+        </div>
       </div>
     </main>
   );
