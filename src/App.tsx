@@ -30,12 +30,13 @@ function App() {
 
   // Create a new Todo item
   function createTodo() {
-    const machineID = window.prompt("Machine Name") || scannedData;
+    const machineID = scannedData;
     const content = window.prompt("Meter Reading") || scannedData;
     if (machineID && content) {
       client.models.Todo.create({
-        machineID: machineID,
+        /*machineID: machineID,*/
         content: content,
+        machineID : scannedData
       });
     }
   }
@@ -63,15 +64,15 @@ function App() {
 
   return (
     <main>    
-      <button onClick={createTodo}>+ new</button>
+      
       <button onClick={() => setScanning(!scanning)}>
-        {scanning ? 'Stop Scanning' : 'Start Scanning'}
+        {scanning ? 'Stop Scanning' : 'Start Scanning Machine ID'}
       </button>
-
+      <button onClick={createTodo}>+ Meter</button>
       {scanning && (
         <QrReader
-          delay={300}
-          style={{ width: '200px', height: '200px' }}
+          delay={500}
+          style={{ width: '200px', height: '200px',border: "2px solid black",textAlign: "center" }}
           onError={handleError}
           onScan={handleScan}
         />
