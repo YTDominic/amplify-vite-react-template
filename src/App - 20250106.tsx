@@ -1,8 +1,3 @@
-import { withAuthenticator } from "@aws-amplify/ui-react";
-import "@aws-amplify/ui-react/styles.css";
-
-
-
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
@@ -25,7 +20,6 @@ function App() {
     return () => {
       // Clean up subscription on unmount
       subscription.unsubscribe();
-    
     };
   }, []);
 
@@ -101,17 +95,8 @@ function App() {
           ))}
         </div>
       </div>
-
-
-    
-
-
-
-
-
-
     </main>
   );
 }
 
-export default withAuthenticator(App);
+export default App;
