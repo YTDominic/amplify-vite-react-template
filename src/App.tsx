@@ -1,8 +1,6 @@
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
-
-
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
@@ -11,7 +9,7 @@ import "./App.css";
 
 const client = generateClient<Schema>();
 
-function App() {
+function App({ signOut }: { signOut: () => void }) {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [scannedData, setScannedData] = useState<string>('');
   const [scanning, setScanning] = useState<boolean>(false);
@@ -70,7 +68,14 @@ function App() {
 
   return (
     <main>    
-      
+     
+     <header className="header">
+        <h1>Meter Readings App</h1>
+        <button onClick={signOut} className="sign-out-button">
+          Sign Out
+        </button>
+      </header>
+
       <button onClick={() => setScanning(!scanning)}>
         {scanning ? 'Stop Scanning' : 'Start Scanning Machine ID'}
       </button>
