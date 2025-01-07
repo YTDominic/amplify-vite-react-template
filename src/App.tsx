@@ -77,9 +77,9 @@ function App({ signOut }: { signOut: () => void }) {
       </header>
 
       <button onClick={() => setScanning(!scanning)}>
-        {scanning ? 'Stop Scanning' : 'Start Scanning Machine ID'}
+        {scanning ? 'Stop Scanning' : 'Scanning Machine ID'}
       </button>
-      <button onClick={createTodo}>+ Meter</button>
+      <button onClick={createTodo}> Metering input</button>
       {scanning && (
         <QrReader
           delay={500}
@@ -106,14 +106,6 @@ function App({ signOut }: { signOut: () => void }) {
           ))}
         </div>
       </div>
-
-
-    
-
-
-
-
-
 
     </main>
   );
