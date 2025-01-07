@@ -71,9 +71,7 @@ function App({ signOut }: { signOut: () => void }) {
      
      <header className="header">
         <h1>Meter Readings App</h1>
-        <button onClick={ signOut } className="sign-out-button">
-          Sign Out
-        </button>
+        <button onClick={signOut}> Sign Out</button>
       </header>
 
       <button onClick={() => setScanning(!scanning)}>
@@ -111,4 +109,4 @@ function App({ signOut }: { signOut: () => void }) {
   );
 }
 
-export default withAuthenticator(App,{});
+export default withAuthenticator(App);
