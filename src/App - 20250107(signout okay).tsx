@@ -70,21 +70,15 @@ function App() {
       {({ signOut, user }) => (
         <main>
           <header className="header">
-            <h3>IN4 - Skill City Team 1 {user?.userId}</h3>
-
-       
-            <button className="sign-out-button" onClick={signOut}>Sign Out</button>
+            <h3>IN4 - Skill City</h3>
+            <h3>Welcome, {user?.userId}</h3>
+            <button onClick={signOut}>Sign Out</button>
           </header>
-          <div className="action-buttons">
-            <button className="action-buttons" onClick={() => setScanning(!scanning)}>
+
+          <button onClick={() => setScanning(!scanning)}>
             {scanning ? 'Stop Scanning' : 'Scanning Machine ID'}
-            </button>
-          
-            <button className="add-meter-btn" onClick={createTodo}>Metering input 
-            </button>
-          </div>
-        
-          
+          </button>
+          <button onClick={createTodo}>Metering input</button>
           {scanning && (
             <QrReader
               delay={500}
