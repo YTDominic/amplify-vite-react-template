@@ -1,6 +1,5 @@
-import { withAuthenticator } from "@aws-amplify/ui-react";
+import { Authenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
-
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
@@ -9,7 +8,7 @@ import "./App.css";
 
 const client = generateClient<Schema>();
 
-function App({ signOut }: { signOut: () => void }) {
+function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [scannedData, setScannedData] = useState<string>('');
   const [scanning, setScanning] = useState<boolean>(false);
@@ -23,7 +22,6 @@ function App({ signOut }: { signOut: () => void }) {
     return () => {
       // Clean up subscription on unmount
       subscription.unsubscribe();
-    
     };
   }, []);
 
@@ -38,9 +36,8 @@ function App({ signOut }: { signOut: () => void }) {
     const content = window.prompt("Enter Meter Reading") || scannedData;
     if (machineID && content) {
       client.models.Todo.create({
-        /*machineID: machineID,*/
         content: content,
-        machineID : scannedData
+        machineID: scannedData,
       });
     }
   }
@@ -67,46 +64,48 @@ function App({ signOut }: { signOut: () => void }) {
   };
 
   return (
-    <main>    
-     
-     <header className="header">
-        <h1>Meter Readings App</h1>
-        <button onClick={signOut}> Sign Out</button>
-      </header>
+    <Authenticator>
+      {({ signOut, user }) => (
+        <main>
+          <header className="header">
+            <h1>Meter Readings App</h1>
+            <button onClick={signOut}>Sign Out</button>
+          </header>
 
-      <button onClick={() => setScanning(!scanning)}>
-        {scanning ? 'Stop Scanning' : 'Scanning Machine ID'}
-      </button>
-      <button onClick={createTodo}> Metering input</button>
-      {scanning && (
-        <QrReader
-          delay={500}
-          style={{ width: '200px', height: '200px',border: "2px solid black",textAlign: "center" }}
-          onError={handleError}
-          onScan={handleScan}
-        />
-      )}
+          <button onClick={() => setScanning(!scanning)}>
+            {scanning ? 'Stop Scanning' : 'Scanning Machine ID'}
+          </button>
+          <button onClick={createTodo}>Metering input</button>
+          {scanning && (
+            <QrReader
+              delay={500}
+              style={{ width: '200px', height: '200px', border: "2px solid black", textAlign: "center" }}
+              onError={handleError}
+              onScan={handleScan}
+            />
+          )}
 
-      <div>
-        <h3>Scanned Data:</h3>
-        <p>{scannedData}</p> {/* Display scanned result here */}
-      </div>
+          <div>
+            <h3>Scanned Data:</h3>
+            <p>{scannedData}</p> {/* Display scanned result here */}
+          </div>
 
-      <div className="container">
-        <h1 className="header">Meter Readings</h1>
-        <div className="grid-container">
-          {sortedTodos.map((todo) => (
-            <div key={todo.id} className="card">
-              <h2 className="card-title">{todo.machineID}</h2>
-              <p className="card-content">{todo.content}</p>
-              <p className="card-date">{formatToReadableUTC(todo.createdAt)}</p>
+          <div className="container">
+            <h1 className="header">Meter Readings</h1>
+            <div className="grid-container">
+              {sortedTodos.map((todo) => (
+                <div key={todo.id} className="card">
+                  <h2 className="card-title">{todo.machineID}</h2>
+                  <p className="card-content">{todo.content}</p>
+                  <p className="card-date">{formatToReadableUTC(todo.createdAt)}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-
-    </main>
+          </div>
+        </main>
+      )}
+    </Authenticator>
   );
 }
 
-export default withAuthenticator(App);
+export default App;
