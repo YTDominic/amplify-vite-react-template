@@ -69,6 +69,7 @@ function App() {
         <main>
           <header className="header">
             <h1>Meter Readings App</h1>
+            <h1>Welcome, {user?.username}</h1>
             <button onClick={signOut}>Sign Out</button>
           </header>
 
