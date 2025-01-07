@@ -35,7 +35,7 @@ function App({ signOut }: { signOut: () => void }) {
   // Create a new Todo item
   function createTodo() {
     const machineID = scannedData;
-    const content = window.prompt("Meter Reading") || scannedData;
+    const content = window.prompt("Enter Meter Reading") || scannedData;
     if (machineID && content) {
       client.models.Todo.create({
         /*machineID: machineID,*/
