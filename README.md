@@ -1,4 +1,4 @@
-## AWS Amplify React+Vite Starter Template
+## Meter Reading App with AWS Amplify React+Vite starter
 
 This repository provides a starter template for creating applications using React+Vite and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities.
 
@@ -15,7 +15,7 @@ For front-end UI design, the VITE framework was embedded. For example, buttons, 
 - **Database**: Real-time database powered by Amazon DynamoDB.
 - **UI design**: Vite web components for user interface design. 
 - **QR Code Scanner**: react-qr-scanner library to read QR code content.
-- 
+  
 ## Deploying to AWS
 Step 1: Using AWS amplify to create an application and select the github repository integration. Selecting AWS Amplify React+Vite Starter Template to create your own repository.  Back-end resources of Cognito userpool, AppSync API and DynamoDB will be provisioning automatically. 
 
